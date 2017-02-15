@@ -4,6 +4,7 @@
  */
 package com.test.handler.inbound;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -21,15 +22,15 @@ public class NettyPrintServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //        super.channelActive(ctx);
+        super.channelActive(ctx);
 
-        int count = 0;
-        while (count < 20) {
-            ctx.writeAndFlush(Unpooled.copiedBuffer("print Server sent: " + count + "\n",
-                CharsetUtil.UTF_8));
-            Thread.sleep(10000);
-            count++;
-        }
+        //        int count = 0;
+        //        while (count < 20) {
+        //            ctx.writeAndFlush(Unpooled.copiedBuffer("print Server sent: " + count + "\n",
+        //                CharsetUtil.UTF_8));
+        //            Thread.sleep(10000);
+        //            count++;
+        //        }
     }
 
     /** 
@@ -50,7 +51,15 @@ public class NettyPrintServerHandler extends ChannelInboundHandlerAdapter {
         //        } finally {
         //            //            ReferenceCountUtil.release(msg); // (2)
         //        }
-        System.out.println("print Server handler");
+        //        System.out.println("print Server handler");
+        //        ctx.writeAndFlush(Unpooled.copiedBuffer("Print Server echo \n", CharsetUtil.UTF_8));
+        ByteBuf param = Unpooled.copiedBuffer((ByteBuf) msg);
+        ctx.write(Unpooled.copiedBuffer("Print Server echo : ", CharsetUtil.UTF_8));
+        ctx.write(msg);
+        ctx.write(Unpooled.copiedBuffer("\n", CharsetUtil.UTF_8));
+        ctx.flush();
+
+        ctx.fireChannelRead(param);
     }
 
     /** 
@@ -58,7 +67,7 @@ public class NettyPrintServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        //        System.out.println("From server: channelReadComplete");
+        System.out.println("print server completed.");
         //        ctx.flush();
         //        super.channelReadComplete(ctx);
     }

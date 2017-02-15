@@ -4,6 +4,7 @@
  */
 package com.test.handler.inbound;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -23,14 +24,14 @@ public class NettyEchoServerHandler extends ChannelInboundHandlerAdapter {
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        //        super.channelActive(ctx);
-        int count = 0;
-        while (count < 20) {
-            ctx.writeAndFlush(Unpooled.copiedBuffer("Echo Server sent: " + count + "\n",
-                CharsetUtil.UTF_8));
-            Thread.sleep(5000);
-            count++;
-        }
+        super.channelActive(ctx);
+        //        int count = 0;
+        //        while (count < 20) {
+        //            ctx.writeAndFlush(Unpooled.copiedBuffer("Echo Server sent: " + count + "\n",
+        //                CharsetUtil.UTF_8));
+        //            Thread.sleep(5000);
+        //            count++;
+        //        }
     }
 
     /** 
@@ -51,17 +52,23 @@ public class NettyEchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         //        System.out.println("Server response: " + msg);
-        //        ctx.writeAndFlush("Server response: " + msg); //  not work, since msg should not be String. exception: java.lang.UnsupportedOperationException: unsupported message type: String (expected: ByteBuf, FileRegion)
+        //                ctx.writeAndFlush("Server response: " + msg); //  not work, since msg should not be String. exception: java.lang.UnsupportedOperationException: unsupported message type: String (expected: ByteBuf, FileRegion)
         //        ctx.writeAndFlush(Unpooled.copiedBuffer(msg, CharsetUtil.UTF_8));
         //        String str = "hello";
         //        str.toCharArray();
         //        
-        //        ByteBuf byteBuf = (ByteBuf) msg;
+        //                ByteBuf byteBuf = (ByteBuf) msg;
         //        ctx.writeAndFlush(msg);
 
-        ctx.write(Unpooled.copiedBuffer("Server received: ", CharsetUtil.UTF_8));
-        ctx.write(msg);
+        ByteBuf byteBuf = (ByteBuf) msg;
+
+        byteBuf.resetReaderIndex();
+
+        ctx.write(Unpooled.copiedBuffer("Echo Server received: ", CharsetUtil.UTF_8));
+        ctx.write(byteBuf);
         ctx.flush();
+
+        //        ctx.fireChannelRead(msg);
 
     }
 
@@ -71,7 +78,7 @@ public class NettyEchoServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         //        ctx.flush();
-        //        System.out.println("completed.");
+        System.out.println("echo completed.");
     }
 
     /** 

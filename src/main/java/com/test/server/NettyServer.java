@@ -15,6 +15,7 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import com.test.handler.inbound.NettyEchoServerHandler;
+import com.test.handler.inbound.NettyPrintServerHandler;
 
 /**
  * 
@@ -39,7 +40,7 @@ public class NettyServer {
                         @Override
                         public void initChannel(SocketChannel ch) throws Exception {
                             final ChannelPipeline pipeline = ch.pipeline();
-                            //                            pipeline.addLast(new NettyPrintServerHandler());
+                            pipeline.addLast(new NettyPrintServerHandler());
                             pipeline.addLast(new NettyEchoServerHandler());
                             //                            pipeline.addLast(new NettyTimeServerHandler());
 
