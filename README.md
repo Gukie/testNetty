@@ -3,6 +3,10 @@
 test netty
 
 ---
+chinese refer:
+http://wiki.jikexueyuan.com/project/netty-4-user-guide/implement-websocket-chat-function.html
+
+---
 
 NOTE following code will not work.
 ```
