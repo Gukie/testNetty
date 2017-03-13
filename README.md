@@ -222,7 +222,9 @@ pipeline.addLast(new ServerHandler());
 
 
 ---
-### 如何处理message( 具体实现可以参考 DefaultChannelPipeline::fireChannelRead() 或者 DefaultChannelPipeline::write() ):
+### 如何处理message
+
+具体实现可以参考 DefaultChannelPipeline::fireChannelRead() 或者 DefaultChannelPipeline::write() :
 
 > 
 1. read： pipeline会它的head中开始读取它的next，获取所有是 inbound的     AbstractChannelHandlerContext，然后一个一个往下走，直到tail才结束
